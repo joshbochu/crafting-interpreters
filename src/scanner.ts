@@ -1,3 +1,4 @@
+import { error } from 'src';
 import { Token, TokenType } from './token';
 
 class Scanner {
@@ -11,7 +12,7 @@ class Scanner {
         this.source = source;
     }
 
-    public scanTokens(): Token[] {
+    scanTokens(): Token[] {
         while (!this.isAtEnd()) {
             this.start = this.current;
             this.scanToken();
@@ -76,33 +77,34 @@ class Scanner {
                 );
                 break;
             default:
+                error(this.line, 'Unexpected character.');
                 break;
         }
     }
 
-    public match(expected: string) {
+    private match(expected: string) {
         if (this.isAtEnd()) return false;
         if (this.source.charAt(this.current) !== expected) return false;
         this.current++;
         return true;
     }
 
-    public addToken(type: TokenType) {
+    private addToken(type: TokenType) {
         this.addTokenWithLiteral(type, null);
         return;
     }
 
-    public addTokenWithLiteral(type: TokenType, literal: unknown) {
+    private addTokenWithLiteral(type: TokenType, literal: unknown) {
         const text = this.source.substring(this.start, this.current);
         const token = new Token(type, text, literal, this.line);
         this.tokens.push(token);
     }
 
-    public advance(): string {
+    private advance(): string {
         return this.source.charAt(++this.current);
     }
 
-    public isAtEnd(): boolean {
+    private isAtEnd(): boolean {
         return this.current >= this.source.length;
     }
 }
