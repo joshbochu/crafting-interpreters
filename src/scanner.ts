@@ -1,4 +1,4 @@
-import { error } from 'src';
+import { error } from './lox';
 import { Token, TokenType } from './token';
 
 class Scanner {
