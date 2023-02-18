@@ -24,7 +24,7 @@ function run(source: string) {
 
 function runFile(path: string) {
     const bytes = fs.readFileSync(path);
-    // run(bytes.toString());
+    run(bytes.toString());
     if (hadError) {
         process.exit(65);
     }
