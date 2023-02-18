@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-condition */
 import * as fs from 'fs';
 import * as readline from 'readline';
-import Scanner from './scanner';
+import { Scanner } from './scanner';
 import { Token } from './token';
 
 let hadError = true;

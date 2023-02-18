@@ -211,4 +211,4 @@ class Scanner {
         return this.current >= this.source.length;
     }
 }
-export default Scanner;
+export { Scanner };
