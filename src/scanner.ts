@@ -1,30 +1,30 @@
 import { error } from './lox';
 import { Token, TokenType } from './token';
 
+const KEYWORDS: Map<string, TokenType> = new Map([
+    ['and', TokenType.AND],
+    ['class', TokenType.CLASS],
+    ['else', TokenType.ELSE],
+    ['false', TokenType.FALSE],
+    ['for', TokenType.FOR],
+    ['fun', TokenType.FUN],
+    ['if', TokenType.IF],
+    ['nil', TokenType.NIL],
+    ['or', TokenType.OR],
+    ['print', TokenType.PRINT],
+    ['return', TokenType.RETURN],
+    ['super', TokenType.SUPER],
+    ['this', TokenType.THIS],
+    ['true', TokenType.TRUE],
+    ['var', TokenType.VAR],
+    ['while', TokenType.WHILE]
+]);
 class Scanner {
     source: string;
     tokens: Token[] = [];
     start = 0;
     current = 0;
     line = 1;
-    keywords: Map<string, TokenType> = new Map([
-        ['and', TokenType.AND],
-        ['class', TokenType.CLASS],
-        ['else', TokenType.ELSE],
-        ['false', TokenType.FALSE],
-        ['for', TokenType.FOR],
-        ['fun', TokenType.FUN],
-        ['if', TokenType.IF],
-        ['nil', TokenType.NIL],
-        ['or', TokenType.OR],
-        ['print', TokenType.PRINT],
-        ['return', TokenType.RETURN],
-        ['super', TokenType.SUPER],
-        ['this', TokenType.THIS],
-        ['true', TokenType.TRUE],
-        ['var', TokenType.VAR],
-        ['while', TokenType.WHILE]
-    ]);
 
     constructor(source: string) {
         this.source = source;
@@ -138,7 +138,7 @@ class Scanner {
     identifier() {
         while (this.isAlphaNumeric(this.peek())) this.advance();
         const text = this.source.substring(this.start, this.current);
-        const tokenType = this.keywords.get(text) ?? TokenType.IDENTIFIER;
+        const tokenType = KEYWORDS.get(text) ?? TokenType.IDENTIFIER;
         this.addToken(tokenType);
     }
 

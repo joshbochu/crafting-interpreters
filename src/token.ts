@@ -49,7 +49,7 @@ enum TokenType {
     EOF
 }
 
-const TOKEN_TYPE_NAMES = {
+const TOKEN_TYPE = {
     [TokenType.LEFT_PAREN]: 'LEFT_PAREN',
     [TokenType.RIGHT_PAREN]: 'RIGHT_PAREN',
     [TokenType.LEFT_BRACE]: 'LEFT_BRACE',
@@ -97,8 +97,8 @@ class Token {
     line: number;
 
     getTokenTypeName(tokenType: TokenType) {
-        const typeName = TOKEN_TYPE_NAMES[tokenType];
-        return typeName !== undefined ? typeName : 'Unknown TokeType';
+        const typeName = TOKEN_TYPE[tokenType];
+        return typeName !== undefined ? typeName : 'Unknown TokenType';
     }
 
     constructor(type: TokenType, lexeme: string, literal: any, line: number) {
