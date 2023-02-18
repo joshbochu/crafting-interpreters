@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-condition */
 import * as fs from 'fs';
 import * as readline from 'readline';
 import Scanner from './scanner';
@@ -30,23 +31,18 @@ function runFile(path: string) {
     }
 }
 
-// todo
-function runPrompt() {
+async function runPrompt() {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
     });
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
-        rl.question('>', (line: string) => {
-            run(line);
-            hadError = false;
-            // will use the query string / first arg string as the prompt to the user again
-            rl.prompt();
+        const input = await new Promise<string>((resolve) => {
+            rl.question('> ', resolve);
         });
+        run(input);
     }
-    return;
 }
 
 function main() {
