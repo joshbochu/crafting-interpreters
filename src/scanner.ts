@@ -149,7 +149,6 @@ class Scanner {
             while (this.isDigit(this.peek())) this.advance();
         }
         const value = this.source.substring(this.start, this.current);
-        console.log(value);
         this.addTokenWithLiteral(TokenType.NUMBER, value);
     }
 
