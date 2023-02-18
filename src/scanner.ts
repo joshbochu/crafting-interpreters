@@ -78,6 +78,7 @@ class Scanner {
                 break;
             case '/':
                 if (this.match('/')) {
+                    // we use newline so scan loop re-runs and we can incr line num
                     while (this.peek() !== '\n' && !this.isAtEnd()) {
                         this.advance();
                     }
