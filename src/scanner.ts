@@ -3,7 +3,7 @@ import { Token, TokenType } from './token';
 
 class Scanner {
     source: string;
-    tokens: Token[];
+    tokens: Token[] = [];
     start = 0;
     current = 0;
     line = 1;
@@ -21,7 +21,7 @@ class Scanner {
         return this.tokens;
     }
 
-    private scanToken() {
+    scanToken() {
         const c = this.advance();
         switch (c) {
             case '(':
@@ -76,35 +76,57 @@ class Scanner {
                         : TokenType.GREATER
                 );
                 break;
+            case '/':
+                if (this.match('/')) {
+                    while (this.peek() !== '\n' && !this.isAtEnd()) {
+                        this.advance();
+                    }
+                } else {
+                    this.addToken(TokenType.SLASH);
+                }
+                break;
+            // ignore whitespace
+            case ' ':
+            case '\r':
+            case '\t':
+                break;
+            case '\n:':
+                this.line++;
+                break;
             default:
                 error(this.line, 'Unexpected character.');
                 break;
         }
     }
 
-    private match(expected: string) {
+    peek(): string {
+        if (this.isAtEnd()) return '\0';
+        return this.source.charAt(this.current);
+    }
+
+    match(expected: string) {
         if (this.isAtEnd()) return false;
         if (this.source.charAt(this.current) !== expected) return false;
         this.current++;
         return true;
     }
 
-    private addToken(type: TokenType) {
+    addToken(type: TokenType) {
         this.addTokenWithLiteral(type, null);
         return;
     }
 
-    private addTokenWithLiteral(type: TokenType, literal: unknown) {
+    addTokenWithLiteral(type: TokenType, literal: unknown) {
         const text = this.source.substring(this.start, this.current);
         const token = new Token(type, text, literal, this.line);
         this.tokens.push(token);
     }
 
-    private advance(): string {
+    advance(): string {
         return this.source.charAt(++this.current);
     }
 
-    private isAtEnd(): boolean {
+    isAtEnd(): boolean {
         return this.current >= this.source.length;
     }
 }
