@@ -31,6 +31,7 @@ class Scanner {
     }
 
     scanTokens(): Token[] {
+        console.log(this.source);
         while (!this.isAtEnd()) {
             this.start = this.current;
             this.scanToken();
@@ -41,6 +42,7 @@ class Scanner {
 
     scanToken() {
         const c = this.advance();
+        console.log('-->: ', c);
         switch (c) {
             case '(':
                 this.addToken(TokenType.LEFT_PAREN);
@@ -206,7 +208,7 @@ class Scanner {
     }
 
     advance(): string {
-        return this.source.charAt(++this.current);
+        return this.source.charAt(this.current++);
     }
 
     isAtEnd(): boolean {

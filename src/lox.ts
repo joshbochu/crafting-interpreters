@@ -54,6 +54,7 @@ function main() {
         runFile(args[0]);
     } else {
         runPrompt();
+        hadError = false;
     }
 }
 
