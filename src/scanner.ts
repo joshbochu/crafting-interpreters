@@ -164,7 +164,7 @@ class Scanner {
     }
 
     string() {
-        if (this.peek() !== '"' && !this.isAtEnd()) {
+        while (this.peek() !== '"' && !this.isAtEnd()) {
             if (this.peek() === '\n') this.line++;
             this.advance();
         }
@@ -176,10 +176,8 @@ class Scanner {
 
         this.advance();
 
-        const num = parseFloat(
-            this.source.substring(this.start + 1, this.current - 1)
-        );
-        this.addTokenWithLiteral(TokenType.STRING, num);
+        const str = this.source.substring(this.start + 1, this.current - 1);
+        this.addTokenWithLiteral(TokenType.STRING, str);
     }
 
     peek(): string {
