@@ -31,7 +31,6 @@ class Scanner {
     }
 
     scanTokens(): Token[] {
-        console.log(this.source);
         while (!this.isAtEnd()) {
             this.start = this.current;
             this.scanToken();
@@ -42,7 +41,6 @@ class Scanner {
 
     scanToken() {
         const c = this.advance();
-        console.log('-->: ', c);
         switch (c) {
             case '(':
                 this.addToken(TokenType.LEFT_PAREN);
@@ -119,7 +117,7 @@ class Scanner {
                 break;
             default:
                 if (this.isDigit(c)) {
-                    this.number;
+                    this.number();
                 } else if (this.isAlpha(c)) {
                     this.identifier();
                 } else {
@@ -151,6 +149,7 @@ class Scanner {
             while (this.isDigit(this.peek())) this.advance();
         }
         const value = this.source.substring(this.start, this.current);
+        console.log(value);
         this.addTokenWithLiteral(TokenType.NUMBER, value);
     }
 

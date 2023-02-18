@@ -19,7 +19,7 @@ function run(source: string) {
     const scanner = new Scanner(source);
     const tokens: Token[] = scanner.scanTokens();
     for (const token of tokens) {
-        console.log(token);
+        console.log(token.toString());
     }
 }
 
