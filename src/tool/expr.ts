@@ -1,6 +1,6 @@
 import { Token } from 'src/token';
 
-interface ExprVisitor<R> {
+export interface ExprVisitor<R> {
     visitBinaryExpr(expr: Binary): R;
     visitGroupingExpr(expr: Grouping): R;
     visitLiteralExpr(expr: Literal): R;
