@@ -1,11 +1,4 @@
-import {
-    Binary,
-    Expr,
-    ExprVisitor,
-    Grouping,
-    Literal,
-    Unary
-} from './tool/expr';
+import { Binary, Expr, ExprVisitor, Grouping, Literal, Unary } from './expr';
 
 export class AstPrinter implements ExprVisitor<string> {
     print(expr: Expr): string {
