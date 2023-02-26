@@ -1,4 +1,4 @@
-import { error } from './lox';
+import { Lox } from './lox';
 import { Token, TokenType } from './token';
 
 const KEYWORDS: Map<string, TokenType> = new Map([
@@ -19,6 +19,7 @@ const KEYWORDS: Map<string, TokenType> = new Map([
     ['var', TokenType.VAR],
     ['while', TokenType.WHILE]
 ]);
+
 class Scanner {
     source: string;
     tokens: Token[] = [];
@@ -121,7 +122,7 @@ class Scanner {
                 } else if (this.isAlpha(c)) {
                     this.identifier();
                 } else {
-                    error(this.line, 'Unexpected character.');
+                    Lox.error(this.line, 'Unexpected character.');
                 }
                 break;
         }
@@ -170,7 +171,7 @@ class Scanner {
         }
 
         if (this.isAtEnd()) {
-            error(this.line, 'unterminated string');
+            Lox.error(this.line, 'unterminated string');
             return;
         }
 

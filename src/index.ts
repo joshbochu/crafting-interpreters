@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { main } from './lox';
+import { Lox } from './lox';
 
-main();
+Lox.main();
