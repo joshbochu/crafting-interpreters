@@ -95,7 +95,7 @@ const tokenize = (source: string): Token[] => {
             case '/':
                 if (matchNext('/')) {
                     cursor += 1;
-                    while (cursor < n && source.charAt(cursor) !== '\n') {
+                    while (!matchNext('\n')) {
                         cursor += 1;
                     }
                 } else {
