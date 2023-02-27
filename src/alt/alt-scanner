@@ -23,6 +23,13 @@ const tokenize = (source: string): Token[] => {
     while (cursor < n) {
         const curChar = source.charAt(cursor);
         switch (curChar) {
+            case ' ':
+            case '\r':
+            case '\t':
+                break;
+            case '\n:':
+                line = line + 1;
+                break;
             case '(':
                 addToken(TokenType.LEFT_PAREN);
                 break;
@@ -84,13 +91,6 @@ const tokenize = (source: string): Token[] => {
                 } else {
                     addToken(TokenType.GREATER);
                 }
-                break;
-            case ' ':
-            case '\r':
-            case '\t':
-                break;
-            case '\n:':
-                line = line + 1;
                 break;
             case '/':
                 if (matchNext('/')) {
