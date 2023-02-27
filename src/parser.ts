@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Binary, Expr, Grouping, Literal, Unary } from './expr';
 import { Token, TokenType } from './token';
+import { Lox } from './lox';
+
+class ParseError extends Error {
+    constructor() {
+        super();
+    }
+}
 
 export class Parser {
     tokens: Token[];
@@ -8,6 +15,14 @@ export class Parser {
 
     constructor(tokens: Token[]) {
         this.tokens = tokens;
+    }
+
+    parse() {
+        try {
+            return this.expression();
+        } catch (error) {
+            return null;
+        }
     }
 
     expression(): Expr {
@@ -78,21 +93,49 @@ export class Parser {
     }
 
     primary(): Expr {
+        if (this.match(TokenType.FALSE)) return new Literal(false);
+        if (this.match(TokenType.TRUE)) return new Literal(true);
+        if (this.match(TokenType.NIL)) return new Literal(null);
+        if (this.match(TokenType.NUMBER, TokenType.STRING))
+            return new Literal(this.previous().literal);
         if (this.match(TokenType.LEFT_PAREN)) {
             const expr = this.expression();
             this.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.");
             return new Grouping(expr);
         }
-        if (this.match(TokenType.FALSE)) return new Literal(false);
-        if (this.match(TokenType.TRUE)) return new Literal(true);
-        if (this.match(TokenType.NUMBER, TokenType.STRING))
-            return new Literal(this.previous().literal);
-        return new Literal(null);
+        throw this.error(this.peek(), 'Expect expression');
     }
 
-    //@ts-ignore
     consume(type: TokenType, message: string): Token {
-        return { type, message } as unknown as Token;
+        if (this.check(type)) return this.advance();
+        throw this.error(this.peek(), message);
+    }
+
+    error(token: Token, message: string) {
+        Lox.parseError(token, message);
+        return new ParseError();
+    }
+
+    synchronize() {
+        this.advance();
+
+        while (!this.isAtEnd()) {
+            if (this.previous().type === TokenType.SEMICOLON) return;
+            switch (this.peek().type) {
+                case TokenType.CLASS:
+                case TokenType.FUN:
+                case TokenType.VAR:
+                case TokenType.FOR:
+                case TokenType.IF:
+                case TokenType.WHILE:
+                case TokenType.PRINT:
+                case TokenType.RETURN:
+                    return;
+                default:
+                    break;
+            }
+            this.advance();
+        }
     }
 
     match(...types: TokenType[]): boolean {

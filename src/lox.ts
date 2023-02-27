@@ -1,8 +1,10 @@
 /* eslint-disable no-constant-condition */
 import * as fs from 'fs';
 import * as readline from 'readline';
+import { AstPrinter } from './ast-printer';
+import { Parser } from './parser';
 import { Scanner } from './scanner';
-import { Token } from './token';
+import { Token, TokenType } from './token';
 
 export class Lox {
     static hadError = false;
@@ -29,11 +31,22 @@ export class Lox {
         Lox.report(line, '', message);
     }
 
+    static parseError(token: Token, message: string) {
+        if (token.type == TokenType.EOF) {
+            Lox.report(token.line, ' at end', message);
+        } else {
+            Lox.report(token.line, " at '" + token.lexeme + "'", message);
+        }
+    }
+
     static run(source: string) {
         const scanner = new Scanner(source);
         const tokens: Token[] = scanner.scanTokens();
-        for (const token of tokens) {
-            console.log(token.toString());
+        const parser = new Parser(tokens);
+        const expression = parser.parse();
+        if (this.hadError) return;
+        if (expression) {
+            console.log(new AstPrinter().print(expression));
         }
     }
 
