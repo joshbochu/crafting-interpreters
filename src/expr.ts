@@ -1,6 +1,6 @@
 import { Token } from './token';
 
-export interface ExprVisitor<R> {
+interface ExprVisitor<R> {
     visitBinaryExpr(expr: Binary): R;
     visitGroupingExpr(expr: Grouping): R;
     visitLiteralExpr(expr: Literal): R;
@@ -32,7 +32,7 @@ export class Grouping extends Expr {
 }
 
 export class Literal extends Expr {
-    constructor(public value: object) {
+    constructor(public value: any) {
         super();
     }
 

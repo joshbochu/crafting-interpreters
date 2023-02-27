@@ -63,7 +63,7 @@ function defineType(
     for (let i = 0; i < fields.length; i++) {
         const field = fields[i].split(' ')[1];
         let type = fields[i].split(' ')[0];
-        type = type === 'Object' ? 'object' : type;
+        type = type === 'Object' ? 'any' : type;
         writer.write(`public ${field}: ${type}`);
         if (i !== fields.length - 1) writer.write(', ');
     }
