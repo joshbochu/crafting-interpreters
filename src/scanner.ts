@@ -131,6 +131,10 @@ class Scanner {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c === '_';
     }
 
+    isDigit(c: string) {
+        return c >= '0' && c <= '9';
+    }
+
     isAlphaNumeric(c: string) {
         return this.isAlpha(c) || this.isDigit(c);
     }
@@ -157,10 +161,6 @@ class Scanner {
             return this.source.charAt(this.current + 1);
         }
         return '\0';
-    }
-
-    isDigit(c: string) {
-        return c >= '0' && c <= '9';
     }
 
     string() {
