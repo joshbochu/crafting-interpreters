@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Token } from './token';
 
-export interface ExprVisitor<R> {
+interface ExprVisitor<R> {
     visitBinaryExpr(expr: Binary): R;
     visitGroupingExpr(expr: Grouping): R;
     visitLiteralExpr(expr: Literal): R;
@@ -33,7 +32,7 @@ export class Grouping extends Expr {
 }
 
 export class Literal extends Expr {
-    constructor(public value: any) {
+    constructor(public value: object) {
         super();
     }
 
