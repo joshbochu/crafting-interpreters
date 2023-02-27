@@ -39,7 +39,7 @@ function defineVisitor(
     baseName: string,
     types: string[]
 ): void {
-    writer.write(`interface ExprVisitor<R> {\n`);
+    writer.write(`export interface ExprVisitor<R> {\n`);
 
     for (const type of types) {
         const typeName = type.split(':')[0].trim();
