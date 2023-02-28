@@ -28,7 +28,7 @@ const tokenize = (source: string): Token[] => {
             case '\t':
                 break;
             case '\n:':
-                line = line + 1;
+                line += 1
                 break;
             case '(':
                 addToken(TokenType.LEFT_PAREN);
@@ -62,32 +62,32 @@ const tokenize = (source: string): Token[] => {
                 break;
             case '!':
                 if (matchNext('=')) {
-                    addToken(TokenType.BANG_EQUAL);
                     cursor += 1;
+                    addToken(TokenType.BANG_EQUAL);
                 } else {
                     addToken(TokenType.BANG);
                 }
                 break;
             case '=':
                 if (matchNext('=')) {
-                    addToken(TokenType.EQUAL_EQUAL);
                     cursor += 1;
+                    addToken(TokenType.EQUAL_EQUAL);
                 } else {
                     addToken(TokenType.EQUAL);
                 }
                 break;
             case '<':
                 if (matchNext('=')) {
-                    addToken(TokenType.LESS_EQUAL);
                     cursor += 1;
+                    addToken(TokenType.LESS_EQUAL);
                 } else {
                     addToken(TokenType.LESS);
                 }
                 break;
             case '>':
                 if (matchNext('=')) {
-                    addToken(TokenType.GREATER_EQUAL);
                     cursor += 1;
+                    addToken(TokenType.GREATER_EQUAL);
                 } else {
                     addToken(TokenType.GREATER);
                 }
@@ -95,7 +95,7 @@ const tokenize = (source: string): Token[] => {
             case '/':
                 if (matchNext('/')) {
                     cursor += 1;
-                    while (cursor < n && source.charAt(cursor) !== '\n') {
+                    while (cursor < n && !matchNext('\n')) {
                         cursor += 1;
                     }
                 } else {
@@ -105,7 +105,7 @@ const tokenize = (source: string): Token[] => {
             default:
                 break;
         }
-        cursor = cursor + 1;
+        cursor += 1;
     }
     addToken(TokenType.EOF, null);
     return tokens;
