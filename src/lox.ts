@@ -5,9 +5,12 @@ import { AstPrinter } from './ast-printer';
 import { Parser } from './parser';
 import { Scanner } from './scanner';
 import { Token, TokenType } from './token';
+import { Interpreter, RuntimeError } from './interpreter';
 
 export class Lox {
+    static interpreter = new Interpreter();
     static hadError = false;
+    static hadRuntimeError = false;
 
     static main() {
         const args = process.argv.slice(2);
@@ -20,6 +23,11 @@ export class Lox {
             Lox.runPrompt();
             Lox.hadError = false;
         }
+    }
+
+    static runtimeError(error: RuntimeError) {
+        console.error(`${error.message}\n[line ${error.token.line}]`);
+        Lox.hadRuntimeError = true;
     }
 
     static report(line: number, where: string, message: string) {
@@ -46,16 +54,15 @@ export class Lox {
         const expression = parser.parse();
         if (this.hadError) return;
         if (expression) {
-            console.log(new AstPrinter().print(expression));
+            Lox.interpreter.interpret(expression);
         }
     }
 
     static runFile(path: string) {
         const bytes = fs.readFileSync(path);
         Lox.run(bytes.toString());
-        if (Lox.hadError) {
-            process.exit(65);
-        }
+        if (Lox.hadError) process.exit(65);
+        if (Lox.hadRuntimeError) process.exit(70);
     }
 
     static async runPrompt() {
