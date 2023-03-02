@@ -15,6 +15,11 @@ function main(args: string[]): void {
         'Unary    : Token operator, Expr right'
     ]);
     // Your code to generate AST goes here
+
+    defineAst(outputDir, 'Stmt', [
+        'Expression : Expr expression',
+        'Print      : Expr expression'
+    ]);
 }
 
 function defineAst(outputDir: string, baseName: string, types: string[]) {
