@@ -75,7 +75,7 @@ function defineType(
     writer.write(') {\n');
     writer.write('super();}\n\n');
     writer.write('\taccept<R>(visitor: ExprVisitor<R>): R {\n');
-    writer.write(`\treturn visitor.visit${className}Expr(this);}\n`);
+    writer.write(`\treturn visitor.visit${className}${baseName}(this);}\n`);
     writer.write('}\n\n\n');
 }
 
