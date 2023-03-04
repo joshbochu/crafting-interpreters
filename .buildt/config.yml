@@ -1,0 +1,8 @@
+name: crafting-interpreters
+id: a44725db-d768-42be-95bd-4dfac9c43ba7
+language: TypeScript
+extensions:
+  - .ts
+  - .cts
+  - .mts
+  - .tsx

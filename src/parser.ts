@@ -1,7 +1,9 @@
+import { Expression, Print } from './stmt';
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Binary, Expr, Grouping, Literal, Unary } from './expr';
-import { Token, TokenType } from './token';
 import { Lox } from './lox';
+import { Stmt } from './stmt';
+import { Token, TokenType } from './token';
 
 class ParseError extends Error {
     constructor() {
@@ -18,11 +20,28 @@ export class Parser {
     }
 
     parse() {
-        try {
-            return this.expression();
-        } catch (error) {
-            return null;
+        const statements: Stmt[] = [];
+        while (!this.isAtEnd()) {
+            statements.push(this.statement());
         }
+        return statements;
+    }
+
+    statement() {
+        if (this.match(TokenType.PRINT)) return this.printStatement();
+        return this.expressionStatement();
+    }
+
+    printStatement() {
+        const val = this.expression();
+        this.consume(TokenType.SEMICOLON, 'Expect ; after a value');
+        return new Print(val);
+    }
+
+    expressionStatement() {
+        const expr = this.expression();
+        this.consume(TokenType.SEMICOLON, 'Expect ; after an expression');
+        return new Expression(expr);
     }
 
     expression(): Expr {
