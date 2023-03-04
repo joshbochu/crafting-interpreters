@@ -14,7 +14,6 @@ function main(args: string[]): void {
         'Literal  : Object value',
         'Unary    : Token operator, Expr right'
     ]);
-    // Your code to generate AST goes here
 
     defineAst(outputDir, 'Stmt', [
         'Expression : Expr expression',
