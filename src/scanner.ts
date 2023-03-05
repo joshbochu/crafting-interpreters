@@ -21,15 +21,12 @@ const KEYWORDS: Map<string, TokenType> = new Map([
 ]);
 
 class Scanner {
-    source: string;
-    tokens: Token[] = [];
-    start = 0;
-    current = 0;
-    line = 1;
+    private tokens: Token[] = [];
+    private start = 0;
+    private current = 0;
+    private line = 1;
 
-    constructor(source: string) {
-        this.source = source;
-    }
+    constructor(public source: string) {}
 
     scanTokens(): Token[] {
         while (!this.isAtEnd()) {
