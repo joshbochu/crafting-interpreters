@@ -1,11 +1,10 @@
 /* eslint-disable no-constant-condition */
 import * as fs from 'fs';
 import * as readline from 'readline';
-import { AstPrinter } from './ast-printer';
+import { Interpreter, RuntimeError } from './interpreter';
 import { Parser } from './parser';
 import { Scanner } from './scanner';
 import { Token, TokenType } from './token';
-import { Interpreter, RuntimeError } from './interpreter';
 
 export class Lox {
     static interpreter = new Interpreter();
@@ -51,10 +50,10 @@ export class Lox {
         const scanner = new Scanner(source);
         const tokens: Token[] = scanner.scanTokens();
         const parser = new Parser(tokens);
-        const expression = parser.parse();
+        const statements = parser.parse();
         if (this.hadError) return;
-        if (expression) {
-            Lox.interpreter.interpret(expression);
+        if (statements) {
+            Lox.interpreter.interpret(statements);
         }
     }
 

@@ -28,7 +28,9 @@ function defineAst(outputDir: string, baseName: string, types: string[]) {
     defineVisitor(writer, baseName, types);
 
     writer.write(`export abstract class ${baseName} {\n`);
-    writer.write(`\tabstract accept<R>(visitor: ExprVisitor<R>): R;\n}\n\n`);
+    writer.write(
+        `\tabstract accept<R>(visitor: ${baseName}Visitor<R>): R;\n}\n\n`
+    );
 
     // define subclassess that extend abstract class
     for (const t of types) {
@@ -43,7 +45,7 @@ function defineVisitor(
     baseName: string,
     types: string[]
 ): void {
-    writer.write(`export interface ExprVisitor<R> {\n`);
+    writer.write(`export interface ${baseName}Visitor<R> {\n`);
 
     for (const type of types) {
         const typeName = type.split(':')[0].trim();
@@ -73,7 +75,7 @@ function defineType(
     }
     writer.write(') {\n');
     writer.write('super();}\n\n');
-    writer.write('\taccept<R>(visitor: ExprVisitor<R>): R {\n');
+    writer.write(`\taccept<R>(visitor: ${baseName}Visitor<R>): R {\n`);
     writer.write(`\treturn visitor.visit${className}${baseName}(this);}\n`);
     writer.write('}\n\n\n');
 }

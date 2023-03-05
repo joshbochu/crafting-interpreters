@@ -1,6 +1,7 @@
-import { ExprVisitor, Binary, Expr, Grouping, Literal, Unary } from './expr';
-import { Token, TokenType } from './token';
+import { Binary, Expr, ExprVisitor, Grouping, Literal, Unary } from './expr';
 import { Lox } from './lox';
+import { Expression, Print, Stmt, StmtVisitor } from './stmt';
+import { Token, TokenType } from './token';
 
 export class RuntimeError extends Error {
     constructor(public token: Token, public message: string) {
@@ -8,11 +9,23 @@ export class RuntimeError extends Error {
     }
 }
 
-export class Interpreter implements ExprVisitor<any> {
-    interpret(expr: Expr) {
+export class Interpreter implements ExprVisitor<any>, StmtVisitor<void> {
+    visitExpressionStmt(expr: Expression): void {
+        this.evaluate(expr);
+        return;
+    }
+
+    visitPrintStmt(expr: Print): void {
+        const val = this.stringify(this.evaluate(expr));
+        console.log(val);
+        return;
+    }
+
+    interpret(statements: Stmt[]) {
         try {
-            const value = this.evaluate(expr);
-            console.log(this.stringify(value));
+            for (const statement of statements) {
+                this.execute(statement);
+            }
         } catch (error) {
             if (error instanceof RuntimeError) {
                 Lox.runtimeError(error);
@@ -20,6 +33,10 @@ export class Interpreter implements ExprVisitor<any> {
                 throw error;
             }
         }
+    }
+
+    execute(statement: Stmt) {
+        statement.accept(this);
     }
 
     stringify(value: any) {
@@ -33,7 +50,8 @@ export class Interpreter implements ExprVisitor<any> {
         return String(value);
     }
 
-    evaluate(expr: Expr) {
+    evaluate(expr: Expr | Stmt) {
+        console.log(expr);
         return expr.accept(this);
     }
 
@@ -59,10 +77,8 @@ export class Interpreter implements ExprVisitor<any> {
                 return <number>left * <number>right;
             case TokenType.BANG_EQUAL:
                 return !this.isEqual(left, right);
-                break;
             case TokenType.EQUAL_EQUAL:
                 return this.isEqual(left, right);
-                break;
             case TokenType.PLUS:
                 if (typeof left === 'number' && typeof right === 'number') {
                     return <number>left + <number>right;
@@ -74,7 +90,6 @@ export class Interpreter implements ExprVisitor<any> {
                     expr.operator,
                     'Operands must be two numbers or two strings.'
                 );
-                break;
             default:
                 break;
         }
@@ -102,6 +117,7 @@ export class Interpreter implements ExprVisitor<any> {
     }
 
     visitLiteralExpr(expr: Literal): any {
+        console.log(expr);
         return expr.value;
     }
 

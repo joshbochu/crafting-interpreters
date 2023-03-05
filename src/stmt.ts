@@ -1,12 +1,12 @@
 import { Expr } from './expr';
 
-export interface ExprVisitor<R> {
+export interface StmtVisitor<R> {
     visitExpressionStmt(expr: Expression): R;
     visitPrintStmt(expr: Print): R;
 }
 
 export abstract class Stmt {
-    abstract accept<R>(visitor: ExprVisitor<R>): R;
+    abstract accept<R>(visitor: StmtVisitor<R>): R;
 }
 
 export class Expression extends Stmt {
@@ -14,7 +14,7 @@ export class Expression extends Stmt {
         super();
     }
 
-    accept<R>(visitor: ExprVisitor<R>): R {
+    accept<R>(visitor: StmtVisitor<R>): R {
         return visitor.visitExpressionStmt(this);
     }
 }
@@ -24,7 +24,7 @@ export class Print extends Stmt {
         super();
     }
 
-    accept<R>(visitor: ExprVisitor<R>): R {
+    accept<R>(visitor: StmtVisitor<R>): R {
         return visitor.visitPrintStmt(this);
     }
 }
