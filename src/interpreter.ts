@@ -10,14 +10,15 @@ export class RuntimeError extends Error {
 }
 
 export class Interpreter implements ExprVisitor<any>, StmtVisitor<void> {
-    visitExpressionStmt(expr: Expression): void {
-        this.evaluate(expr);
+    visitExpressionStmt(stmt: Expression): void {
+        this.evaluate(stmt.expression);
         return;
     }
 
-    visitPrintStmt(expr: Print): void {
-        const val = this.stringify(this.evaluate(expr));
-        console.log(val);
+    visitPrintStmt(stmt: Print): void {
+        const val = this.evaluate(stmt.expression);
+        const str = this.stringify(val);
+        console.log(str);
         return;
     }
 
@@ -51,13 +52,13 @@ export class Interpreter implements ExprVisitor<any>, StmtVisitor<void> {
     }
 
     evaluate(expr: Expr | Stmt) {
-        console.log(expr);
         return expr.accept(this);
     }
 
     visitBinaryExpr(expr: Binary): any {
         const left = this.evaluate(expr.left);
         const right = this.evaluate(expr.right);
+        console.log(left, right);
         switch (expr.operator.type) {
             case TokenType.GREATER:
                 this.checkNumberOperands(expr.operator, left, right);
@@ -81,9 +82,11 @@ export class Interpreter implements ExprVisitor<any>, StmtVisitor<void> {
                 return this.isEqual(left, right);
             case TokenType.PLUS:
                 if (typeof left === 'number' && typeof right === 'number') {
+                    console.log('here');
                     return <number>left + <number>right;
                 }
                 if (typeof left === 'string' && typeof right === 'string') {
+                    console.log('herestr');
                     return <string>left + <string>right;
                 }
                 throw new RuntimeError(
@@ -117,7 +120,6 @@ export class Interpreter implements ExprVisitor<any>, StmtVisitor<void> {
     }
 
     visitLiteralExpr(expr: Literal): any {
-        console.log(expr);
         return expr.value;
     }
 
