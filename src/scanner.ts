@@ -183,10 +183,11 @@ class Scanner {
     }
 
     match(expected: string) {
-        if (this.isAtEnd()) return false;
-        if (this.source.charAt(this.current) !== expected) return false;
-        this.current++;
-        return true;
+        if (!this.isAtEnd() && this.source.charAt(this.current) === expected) {
+            this.current++;
+            return true;
+        }
+        return false;
     }
 
     addToken(type: TokenType) {
