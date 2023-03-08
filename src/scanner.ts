@@ -37,7 +37,7 @@ class Scanner {
         return this.tokens;
     }
 
-    scanToken() {
+    private scanToken() {
         const c = this.advance();
         switch (c) {
             case '(':
@@ -124,26 +124,26 @@ class Scanner {
         }
     }
 
-    isAlpha(c: string): boolean {
+    private isAlpha(c: string): boolean {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c === '_';
     }
 
-    isDigit(c: string) {
+    private isDigit(c: string) {
         return c >= '0' && c <= '9';
     }
 
-    isAlphaNumeric(c: string) {
+    private isAlphaNumeric(c: string) {
         return this.isAlpha(c) || this.isDigit(c);
     }
 
-    identifier() {
+    private identifier() {
         while (this.isAlphaNumeric(this.peek())) this.advance();
         const text = this.source.substring(this.start, this.current);
         const tokenType = KEYWORDS.get(text) ?? TokenType.IDENTIFIER;
         this.addToken(tokenType);
     }
 
-    number() {
+    private number() {
         while (this.isDigit(this.peek())) this.advance();
         if (this.peek() === '.' && this.peekNext()) {
             this.advance();
@@ -153,14 +153,14 @@ class Scanner {
         this.addTokenWithLiteral(TokenType.NUMBER, value);
     }
 
-    peekNext() {
+    private peekNext() {
         if (this.current + 1 < this.source.length) {
             return this.source.charAt(this.current + 1);
         }
         return '\0';
     }
 
-    string() {
+    private string() {
         while (this.peek() !== '"' && !this.isAtEnd()) {
             if (this.peek() === '\n') this.line++;
             this.advance();
@@ -177,12 +177,12 @@ class Scanner {
         this.addTokenWithLiteral(TokenType.STRING, str);
     }
 
-    peek(): string {
+    private peek(): string {
         if (this.isAtEnd()) return '\0';
         return this.source.charAt(this.current);
     }
 
-    match(expected: string) {
+    private match(expected: string) {
         if (!this.isAtEnd() && this.source.charAt(this.current) === expected) {
             this.current++;
             return true;
@@ -190,22 +190,22 @@ class Scanner {
         return false;
     }
 
-    addToken(type: TokenType) {
+    private addToken(type: TokenType) {
         this.addTokenWithLiteral(type, null);
         return;
     }
 
-    addTokenWithLiteral(type: TokenType, literal: unknown) {
+    private addTokenWithLiteral(type: TokenType, literal: unknown) {
         const text = this.source.substring(this.start, this.current);
         const token = new Token(type, text, literal, this.line);
         this.tokens.push(token);
     }
 
-    advance(): string {
+    private advance(): string {
         return this.source.charAt(this.current++);
     }
 
-    isAtEnd(): boolean {
+    private isAtEnd(): boolean {
         return this.current >= this.source.length;
     }
 }
