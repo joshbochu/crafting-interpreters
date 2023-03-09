@@ -12,12 +12,9 @@ class ParseError extends Error {
 }
 
 export class Parser {
-    tokens: Token[];
     current = 0;
 
-    constructor(tokens: Token[]) {
-        this.tokens = tokens;
-    }
+    constructor(public tokens: Token[]) {}
 
     parse() {
         const statements: Stmt[] = [];
