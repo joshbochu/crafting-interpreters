@@ -12,7 +12,7 @@ class Parser {
     private equality(): Expr {
         // let expr = this.comparison();
         while (this.match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL)) {
-            // const operator = this.previous();
+            const operator = this.previous();
             // const right = this.comparison();
             // expr = new Binary(expr, operator, right);
         }
@@ -27,5 +27,9 @@ class Parser {
             }
         }
         return false;
+    }
+
+    private previous() {
+        return;
     }
 }
